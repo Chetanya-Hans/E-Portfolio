@@ -30,6 +30,11 @@
     overflow-x: hidden;
   }
 
+  img, svg, video, canvas {
+    max-width: 100%;
+    height: auto;
+  }
+
   /* NOISE OVERLAY */
   body::before {
     content: '';
@@ -49,7 +54,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 4rem;
+    padding: 1.25rem clamp(1.25rem, 4vw, 4rem);
     border-bottom: 1px solid var(--border);
     background: rgba(10,10,10,0.85);
     backdrop-filter: blur(16px);
@@ -87,7 +92,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 8rem 4rem 4rem;
+    padding: 8rem clamp(1.25rem, 4vw, 4rem) 4rem;
     position: relative;
     overflow: hidden;
   }
@@ -105,7 +110,8 @@
 
   .hero-glow {
     position: absolute;
-    width: 600px; height: 600px;
+    width: clamp(320px, 55vw, 600px);
+    height: clamp(320px, 55vw, 600px);
     border-radius: 50%;
     background: radial-gradient(circle, rgba(200, 241, 53, 0.06) 0%, transparent 70%);
     top: 50%; left: 20%;
@@ -144,7 +150,7 @@
   h1 .line2 { color: var(--accent); }
 
   .hero-desc {
-    max-width: 520px;
+    max-width: 60ch;
     color: var(--muted);
     font-size: 0.9rem;
     line-height: 1.8;
@@ -203,7 +209,7 @@
 
   /* SECTIONS */
   section {
-    padding: 7rem 4rem;
+    padding: 7rem clamp(1.25rem, 4vw, 4rem);
     border-top: 1px solid var(--border);
   }
 
@@ -227,8 +233,8 @@
   /* ABOUT */
   .about-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2rem, 6vw, 6rem);
     align-items: start;
   }
 
@@ -272,7 +278,7 @@
   /* SKILLS */
   .skills-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1px;
     background: var(--border);
     border: 1px solid var(--border);
@@ -316,7 +322,7 @@
   /* PROJECTS */
   .projects-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 1px;
     background: var(--border);
     border: 1px solid var(--border);
@@ -324,7 +330,7 @@
 
   .project-card {
     background: var(--card);
-    padding: 3rem;
+    padding: clamp(1.5rem, 4vw, 3rem);
     position: relative;
     overflow: hidden;
     transition: background 0.3s;
@@ -391,7 +397,7 @@
 
   .edu-item {
     background: var(--card);
-    padding: 2.5rem 3rem;
+    padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1.25rem, 3.5vw, 3rem);
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
@@ -427,8 +433,15 @@
   #contact {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: center;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
   }
 
   .contact-left h2 { margin-bottom: 1.5rem; }
@@ -477,7 +490,7 @@
 
   .contact-right {
     border: 1px solid var(--border);
-    padding: 3rem;
+    padding: clamp(1.5rem, 4vw, 3rem);
     background: var(--card);
   }
 
@@ -523,7 +536,7 @@
 
   /* FOOTER */
   footer {
-    padding: 2rem 4rem;
+    padding: 2rem clamp(1.25rem, 4vw, 4rem);
     border-top: 1px solid var(--border);
     display: flex;
     justify-content: space-between;
@@ -570,17 +583,225 @@
     mix-blend-mode: difference;
   }
 
-  /* MOBILE */
+  /* HAMBURGER BUTTON */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 28px;
+    height: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 200;
+    padding: 0;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+
+  .hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .hamburger.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+
+  /* MOBILE NAV OVERLAY */
+  .nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.97);
+    backdrop-filter: blur(24px);
+    z-index: 99;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .nav-overlay.open {
+    display: flex;
+  }
+
+  .nav-overlay a {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    transition: color 0.2s;
+  }
+
+  .nav-overlay a:hover {
+    color: var(--accent);
+  }
+
+  /* HIDE CURSOR ON TOUCH */
+  @media (hover: none) and (pointer: coarse) {
+    .cursor { display: none !important; }
+  }
+
+  /* ─── TABLET (769px – 1024px) ─── */
+  @media (max-width: 1024px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    #contact {
+      grid-template-columns: 1fr;
+    }
+
+    .projects-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* ─── MOBILE (≤768px) ─── */
   @media (max-width: 768px) {
-    nav { padding: 1.25rem 1.5rem; }
+    .hamburger { display: flex; }
+
     .nav-links { display: none; }
-    #hero, section { padding: 5rem 1.5rem; }
-    h1 { font-size: 3.5rem; }
-    .about-grid, .skills-container, .projects-grid, #contact { grid-template-columns: 1fr; gap: 1px; }
-    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+
+    #hero {
+      padding: 6.5rem 1.25rem 3rem;
+      min-height: calc(100vh - 2rem);
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 12vw, 4.5rem);
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 6vw, 2.5rem);
+      margin-bottom: 2.5rem;
+    }
+
+    section {
+      padding: 4rem 1.25rem;
+    }
+
+    .hero-desc {
+      font-size: 0.85rem;
+    }
+
+    .hero-cta {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .hero-cta .btn {
+      width: 100%;
+      text-align: center;
+      padding: 1rem 2rem;
+    }
+
     .hero-scroll { display: none; }
-    .about-stats { grid-template-columns: 1fr 1fr; }
-    .edu-item { grid-template-columns: 1fr; }
+
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .about-stats {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .stat-num {
+      font-size: 2rem;
+    }
+
+    .stat-box {
+      padding: 1.5rem;
+    }
+
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .skills-container {
+      grid-template-columns: 1fr;
+    }
+
+    .skill-group {
+      padding: 1.75rem;
+    }
+
+    .edu-item {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .edu-badge {
+      justify-self: start;
+    }
+
+    #contact {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .contact-link {
+      padding: 1.25rem;
+    }
+
+    .contact-right {
+      padding: 1.5rem;
+    }
+
+    footer {
+      flex-direction: column;
+      gap: 0.75rem;
+      text-align: center;
+      padding: 1.5rem 1.25rem;
+    }
+  }
+
+  /* ─── SMALL PHONES (≤400px) ─── */
+  @media (max-width: 400px) {
+    body { font-size: 13px; }
+
+    h1 {
+      font-size: 2.4rem;
+    }
+
+    .about-stats {
+      grid-template-columns: 1fr;
+    }
+
+    .stat-box {
+      padding: 1.25rem;
+    }
+
+    .contact-link-val {
+      font-size: 0.78rem;
+      word-break: break-all;
+    }
   }
 </style>
 </head>
@@ -789,9 +1010,9 @@
 </section>
 
 <!-- CONTACT -->
-<section style="padding: 7rem 4rem; border-top: 1px solid var(--border);" id="contact">
+<section id="contact">
   <div class="section-label">05 — Contact</div>
-  <div style="display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:start;">
+  <div class="contact-grid">
     <div class="contact-left">
       <h2>Let's Work<br>Together.</h2>
       <p class="contact-tagline">
